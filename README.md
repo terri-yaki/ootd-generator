@@ -26,7 +26,7 @@ OOTD Generator is a minimal Flutter app that helps generate a random outfit from
   - Snackbar notifications on dismissal.
 
 - **Cross-Platform**
-  - Runs on Desktop, will release app on Android and iOS soon.
+  - Runs on Desktop and Androids, will release app on iOS soon.
   - Desktop window size is configurable (using the `window_size` package).
 
 ## Installation
