@@ -82,9 +82,7 @@ class _AnimatedStaggeredOutfitState extends State<AnimatedStaggeredOutfit>
   Widget _buildAnimatedItem(int index, ClothingItem item) {
     double start = index / widget.items.length;
     double end = (index + 1) / widget.items.length;
-    // Choose beginOffset based on slideFromLeft:
-    // If slideFromLeft is true, items enter from the left (negative offset),
-    // otherwise from the right.
+    // Items enter from off-screen; use left or right based on slideFromLeft.
     final beginOffset = widget.slideFromLeft ? const Offset(-3.0, 0) : const Offset(3.0, 0);
     final animation = Tween<Offset>(
       begin: beginOffset,
@@ -189,7 +187,7 @@ class _AnimatedStaggeredOutfitState extends State<AnimatedStaggeredOutfit>
   }
 }
 
-/// HomeScreen displays the current outfit with dismissible functionality and navigates to the WardrobeScreen.
+/// HomeScreen displays the current outfit with dismissible functionality and navigates to the WardrobeScreen for managing items.
 /// When swiped, the outfit items animate in from left or right based on swipe direction and move as a chain.
 /// The outfit is generated in fixed order: top, bottom, footwear, accessory.
 /// The item tree is reloaded every time the user returns to the HomeScreen if the wardrobe has changed.
@@ -303,9 +301,11 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
     final bool wardrobeEmpty = WardrobeData.items.isEmpty;
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: 80,
+        // Increase the app bar height.
+        toolbarHeight: 100,
         title: Padding(
-          padding: const EdgeInsets.only(top: 20),
+          // Lower the logo inside the app bar.
+          padding: const EdgeInsets.only(top: 40),
           child: Image.asset(
             'assets/ootd.png',
             height: 60,
@@ -320,10 +320,10 @@ class _HomeScreenState extends State<HomeScreen> with RouteAware {
             padding: const EdgeInsets.only(top: 20),
             child: Center(
               child: wardrobeEmpty
-                  ? Padding(
+                  ? const Padding(
                       padding: const EdgeInsets.only(bottom: 30),
                       child: const Text(
-                        'No outfit available. Please add items in your wardrobe ➡️',
+                        'No outfit available.\nPlease add items in your wardrobe',
                         textAlign: TextAlign.center,
                       ),
                     )
