@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import '../models/clothing_item.dart';
 import '../models/wardrobe_data.dart';
 
-
 enum SortOption {
   alphabetical,
   category,
@@ -47,7 +46,7 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
     }
   }
 
-  //- Helper function to get proper image provider.
+  // Helper function to get proper image provider.
   ImageProvider getImageProvider(String imagePath) {
     if (imagePath.startsWith('assets/')) {
       return AssetImage(imagePath);
@@ -62,69 +61,70 @@ class _WardrobeScreenState extends State<WardrobeScreen> {
     return pickedFile != null ? File(pickedFile.path) : null;
   }
 
-/// Add a new clothing item using Hive for persistence.
-Future<void> _addItem({
-  required String imagePath,
-  required String name,
-  required List<String> tags,
-  required ClothingCategory category,
-}) async {
-  final newItem = ClothingItem(
-    id: DateTime.now().millisecondsSinceEpoch.toString(),
-    imagePath: imagePath,
-    name: name, // If empty, remains empty.
-    tags: tags,
-    category: category,
-  );
-  await WardrobeData.addItem(newItem);
-  setState(() {}); // Refresh UI.
-}
-
-/// Edit an existing clothing item using Hive.
-Future<void> _editClothingItem(ClothingItem oldItem, {
-  required String imagePath,
-  required String name,
-  required List<String> tags,
-  required ClothingCategory category,
-}) async {
-  final updatedItem = ClothingItem(
-    id: oldItem.id,
-    imagePath: imagePath,
-    name: name,
-    tags: tags,
-    category: category,
-  );
-  await WardrobeData.updateItem(updatedItem);
-  setState(() {}); // Refresh UI.
-}
-
-/// Delete an item with confirmation using Hive.
-Future<void> _deleteItem(ClothingItem item) async {
-  final confirm = await showDialog<bool>(
-    context: context,
-    builder: (context) => AlertDialog(
-      title: const Text('Delete Item'),
-      content: const Text('Are you sure you want to delete this item?'),
-      actions: [
-        TextButton(
-          style: TextButton.styleFrom(foregroundColor: _caramel),
-          onPressed: () => Navigator.pop(context, false),
-          child: const Text('Cancel'),
-        ),
-        ElevatedButton(
-          style: ElevatedButton.styleFrom(backgroundColor: _tan),
-          onPressed: () => Navigator.pop(context, true),
-          child: const Icon(Icons.delete),
-        ),
-      ],
-    ),
-  );
-  if (confirm == true) {
-    await WardrobeData.deleteItem(item.id);
+  /// Add a new clothing item using Hive for persistence.
+  Future<void> _addItem({
+    required String imagePath,
+    required String name,
+    required List<String> tags,
+    required ClothingCategory category,
+  }) async {
+    final newItem = ClothingItem(
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
+      imagePath: imagePath,
+      name: name, // If empty, remains empty.
+      tags: tags,
+      category: category,
+    );
+    await WardrobeData.addItem(newItem);
     setState(() {}); // Refresh UI.
-    Navigator.pop(context); // Close the edit dialog.
   }
-}
+
+  /// Edit an existing clothing item using Hive.
+  Future<void> _editClothingItem(ClothingItem oldItem, {
+    required String imagePath,
+    required String name,
+    required List<String> tags,
+    required ClothingCategory category,
+  }) async {
+    final updatedItem = ClothingItem(
+      id: oldItem.id,
+      imagePath: imagePath,
+      name: name,
+      tags: tags,
+      category: category,
+    );
+    // Directly update the Hive box.
+    await WardrobeData.box.put(oldItem.id, updatedItem);
+    setState(() {}); // Refresh UI.
+  }
+
+  /// Delete an item with confirmation using Hive.
+  Future<void> _deleteItem(ClothingItem item) async {
+    final confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Delete Item'),
+        content: const Text('Are you sure you want to delete this item?'),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(foregroundColor: _caramel),
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Cancel'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: _tan),
+            onPressed: () => Navigator.pop(context, true),
+            child: const Icon(Icons.delete),
+          ),
+        ],
+      ),
+    );
+    if (confirm == true) {
+      await WardrobeData.deleteItem(item.id);
+      setState(() {}); // Refresh UI.
+      Navigator.pop(context); // Close the edit dialog.
+    }
+  }
 
   // Dialog to add a new item.
   Future<void> _showAddItemDialog() async {
@@ -162,7 +162,7 @@ Future<void> _deleteItem(ClothingItem item) async {
                       },
                     ),
                     const SizedBox(height: 16),
-                    // Always show a preview: either the uploaded image or a placeholder based on category.
+                    // Preview: either the uploaded image or a placeholder based on category.
                     Container(
                       width: 120,
                       height: 120,
@@ -222,7 +222,6 @@ Future<void> _deleteItem(ClothingItem item) async {
               ),
             ),
             actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            // Use plus icon for add item button and raise it by 30px via padding.
             actions: [
               TextButton(
                 style: TextButton.styleFrom(foregroundColor: _caramel),
@@ -402,7 +401,6 @@ Future<void> _deleteItem(ClothingItem item) async {
                 ],
               ),
             ),
-            // Removed default actions as custom Row is used.
           ),
         );
       },
@@ -412,8 +410,7 @@ Future<void> _deleteItem(ClothingItem item) async {
   // Returns a sorted copy of wardrobe items.
   List<ClothingItem> _getSortedItems() {
     List<ClothingItem> sorted = List.from(WardrobeData.items);
-    int compare<T extends Comparable>(T a, T b) =>
-        _ascending ? a.compareTo(b) : b.compareTo(a);
+    int compare<T extends Comparable>(T a, T b) => _ascending ? a.compareTo(b) : b.compareTo(a);
     switch (_currentSort) {
       case SortOption.alphabetical:
         sorted.sort((a, b) => compare(a.name.toLowerCase(), b.name.toLowerCase()));
@@ -434,8 +431,7 @@ Future<void> _deleteItem(ClothingItem item) async {
         sorted.sort((a, b) => compare(categoryOrder(a.category), categoryOrder(b.category)));
         break;
       case SortOption.tagAlphabetical:
-        String firstTag(ClothingItem item) =>
-            item.tags.isNotEmpty ? item.tags.first.toLowerCase() : '';
+        String firstTag(ClothingItem item) => item.tags.isNotEmpty ? item.tags.first.toLowerCase() : '';
         sorted.sort((a, b) => compare(firstTag(a), firstTag(b)));
         break;
     }
@@ -488,77 +484,77 @@ Future<void> _deleteItem(ClothingItem item) async {
         ],
       ),
       body: Padding(
-  padding: const EdgeInsets.all(16.0), // Larger overall margin.
-  child: sortedItems.isEmpty
-      ? const Center(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 30),
-            child: Text(
-              'No item available yet :(',
-              textAlign: TextAlign.center,
-            ),
-          ),
-        )
-      : LayoutBuilder(
-          builder: (context, constraints) {
-            int crossAxisCount = constraints.maxWidth < 300 ? 1 : 2;
-            return GridView.builder(
-              itemCount: sortedItems.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: crossAxisCount,
-                mainAxisSpacing: 16,
-                crossAxisSpacing: 16,
-                childAspectRatio: 1, // Square items.
-              ),
-              itemBuilder: (context, index) {
-                final item = sortedItems[index];
-                return InkWell(
-                  onTap: () => _showEditItemDialog(item),
-                  child: AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color.fromARGB(255, 102, 89, 64).withOpacity(0.3),
-                            offset: const Offset(5, 5), // 5px offset to bottom right.
-                            blurRadius: 10,
-                          ),
-                        ],
-                      ),
-                      child: Card(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        elevation: 0, // Shadow provided by parent container.
-                        clipBehavior: Clip.antiAlias,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: getImageProvider(item.imagePath),
-                              fit: BoxFit.cover,
+        padding: const EdgeInsets.all(16.0), // Larger overall margin.
+        child: sortedItems.isEmpty
+            ? const Center(
+                child: Padding(
+                  padding: EdgeInsets.only(bottom: 30),
+                  child: Text(
+                    'No item available yet :(',
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              )
+            : LayoutBuilder(
+                builder: (context, constraints) {
+                  int crossAxisCount = constraints.maxWidth < 300 ? 1 : 2;
+                  return GridView.builder(
+                    itemCount: sortedItems.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: crossAxisCount,
+                      mainAxisSpacing: 16,
+                      crossAxisSpacing: 16,
+                      childAspectRatio: 1, // Square items.
+                    ),
+                    itemBuilder: (context, index) {
+                      final item = sortedItems[index];
+                      return InkWell(
+                        onTap: () => _showEditItemDialog(item),
+                        child: AspectRatio(
+                          aspectRatio: 1,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color.fromARGB(255, 102, 89, 64).withOpacity(0.3),
+                                  offset: const Offset(5, 5), // 5px offset to bottom right.
+                                  blurRadius: 10,
+                                ),
+                              ],
+                            ),
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              elevation: 0, // Shadow provided by parent container.
+                              clipBehavior: Clip.antiAlias,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: getImageProvider(item.imagePath),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                );
-              },
-            );
-          },
+                      );
+                    },
+                  );
+                },
+              ),
+      ),
+      floatingActionButton: Padding(
+        // Raise the add item button by 30px.
+        padding: const EdgeInsets.only(bottom: 30),
+        child: FloatingActionButton(
+          backgroundColor: _caramel,
+          onPressed: _showAddItemDialog,
+          child: const Icon(Icons.add),
         ),
-    ),
-  floatingActionButton: Padding(
-          // Raise the add item button by 30px.
-          padding: const EdgeInsets.only(bottom: 30),
-          child: FloatingActionButton(
-            backgroundColor: _caramel,
-            onPressed: _showAddItemDialog,
-            child: const Icon(Icons.add),
-          ),
-        ),
-      );
-    }
+      ),
+    );
   }
+}
