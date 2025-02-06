@@ -1,0 +1,36 @@
+# File: pubspec.yaml
+
+name: OOTD_Generator
+description: A minimal Flutter app for Outfit of the Day generation.
+version: 1.0.0+1
+environment:
+  sdk: ">=2.19.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  image_picker: ^0.8.7+4
+  cupertino_icons: ^1.0.2
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  flutter_launcher_icons: ^0.14.3
+  window_size: ^0.1.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  hive_generator: ^2.0.0
+  build_runner: ^2.3.3
+
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/ootd_app.png"
+  remove_alpha_ios: true

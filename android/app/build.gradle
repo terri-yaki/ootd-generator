@@ -1,0 +1,46 @@
+// File: android/app/build.gradle
+
+plugins {
+    // Use the updated Android Gradle Plugin version.
+    id "com.android.application" version "8.2.1"
+    // Use the current Kotlin plugin version.
+    id "org.jetbrains.kotlin.android" version "1.8.22"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin plugins.
+    id "dev.flutter.flutter-gradle-plugin"
+}
+
+android {
+    namespace = "com.terriyaki.ootd"
+    compileSdk = flutter.compileSdkVersion
+    ndkVersion = flutter.ndkVersion
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    defaultConfig {
+        // Specify your unique Application ID.
+        applicationId = "com.terriyaki.ootd"
+        // These values are provided by Flutter's template configuration.
+        minSdk = flutter.minSdkVersion
+        targetSdk = flutter.targetSdkVersion
+        versionCode = flutter.versionCode
+        versionName = flutter.versionName
+    }
+
+    buildTypes {
+        release {
+            // For now, signing with debug keys for release builds.
+            signingConfig = signingConfigs.debug
+        }
+    }
+}
+
+flutter {
+    source = "../.."
+}
