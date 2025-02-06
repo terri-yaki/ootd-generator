@@ -1,5 +1,8 @@
 name: Build and Release
 
+env:
+  FLUTTER_SUPPRESS_ANALYTICS: "true"
+
 on:
   push:
     branches: [ main ]
