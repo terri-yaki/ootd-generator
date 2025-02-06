@@ -27,7 +27,7 @@ jobs:
         run: flutter build ipa --export-options-plist=ios/Runner/ExportOptions.plist
 
       - name: Upload IPA Artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: ootd-generator-ipa
           path: build/ios/ipa/*.ipa
