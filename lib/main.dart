@@ -44,9 +44,9 @@ class OOTDRandomizerApp extends StatelessWidget {
           primary: Color(0xFFB29C70),      // Caramel (AppBar/Accent)
           onPrimary: Color(0xFF7B6D47),    // Mocha Brown (Icons on light surfaces)
           secondary: Color(0xFFD9CBA3),      // Tan (Card surface)
-          onSecondary: Color(0xFF443B2A),    // Dark Brown (Main text)
+          onSecondary: Color(0xFF443B2A),   // Dark Brown (Text)
           background: Color(0xFFEFE6DD),     // Beige (Background)
-          onBackground: Color(0xFF443B2A),   // Dark Brown (Text)
+          onBackground: Color(0xFF443B2A),  // Dark Brown (Text on light surfaces)
           surface: Color(0xFFD9CBA3),        // Tan (Cards)
           onSurface: Color(0xFF443B2A),      // Dark Brown
           error: Colors.red,
