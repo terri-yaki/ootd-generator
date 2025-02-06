@@ -1,29 +1,25 @@
-# OOTD Generator
+# OOTD Generator 1.0.0.1
 
 ## Overview
 
-OOTD Generator is a minimal Flutter app that helps you generate a random outfit from your wardrobe items. The app allows you to manage clothing items, persist them using Hive, and generate an outfit with swipe effect. Outfits are generated in a fixed order: Top, Bottom, Footwear, and Accessory.
+OOTD Generator is a minimal Flutter app that helps generate a random outfit from your wardrobe. The app lets you manage clothing items, persist them using Hive, and generate an outfit in a fixed order (Top, Bottom, Footwear, and Accessory). The generated outfit is displayed with animated transitions and a chain swipe effect.
 
 ## Features
 
 - **Wardrobe Management**
-  - Add new clothing items with a photo, name, tags, and category.
-  - Edit and delete existing clothing items with confirmation.
-  - Persistent storage via Hive (data is saved across app restarts).
+  - Add, edit, and delete clothing items with photo, name, tags, and category.
 
 - **Outfit Generation**
   - Generates a random outfit in fixed order: Top, Bottom, Footwear, and Accessory.
-  - Displays the outfit with a staggered item tree.
-  - Each outfit item is clickable—tapping an item shows its details in a popup.
+  - Tapping an item shows its details in a popup window.
 
 - **Swipe Actions**
   - Swipe to dismiss the current outfit.
-  - Dragging one item moves the others.
   - Snackbar notifications on dismissal.
 
-- **Platform Support**
-  - Runs on Android, iOS and Desktop.
-  - Desktop window size configurable (using the `window_size` package, check main.dart).
+- **Cross-Platform**
+  - Runs on Desktop, will release app on Android and iOS soon.
+  - Desktop window size is configurable (using the `window_size` package).
 
 ## Installation
 
@@ -42,6 +38,9 @@ OOTD Generator is a minimal Flutter app that helps you generate a random outfit 
 4. **Run the app**
     ```bash
     flutter run
+## Release
+Download the latest release from [GitHub Releases](https://github.com/terri-yaki/ootd-generator/releases).
+
 ## License
 
 This project is provided for **non-commercial use only**. You may modify and distribute it for personal or academic purposes. Commercial use by others is prohibited.
