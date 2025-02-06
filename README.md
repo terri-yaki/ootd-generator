@@ -1,4 +1,4 @@
-# OOTD Generator 1.0.0
+# OOTD Generator
 
 ## Overview
 
